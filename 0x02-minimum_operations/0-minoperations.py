@@ -14,10 +14,9 @@ def minOperations(n):
         if n % roo == 0:
             # total even-divisions by root = total operations
             op += roo
-            # set n to the remainder
             n = n / roo
-            # reduce root to find remaining smaller vals that evenly-divide n
+            # reduce root to find remaining smaller vals that evenly-divides n
             roo -= 1
-        # increment root until it evenly-divides n
+        # increment root until it evenly-divides
         roo += 1
     return op
