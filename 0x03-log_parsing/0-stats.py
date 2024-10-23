@@ -1,52 +1,44 @@
-#!/usr/bin/python3
+ii#!/usr/bin/python3
+
+"""Script that reads stdin line by line and computes metrics"""
 
 import sys
 
-def print_m(dic, file_size):
-    """
-    Args:
-        dict_sc: dict of status codes
-        total_file_size: total of the file
-    Returns:
-        Nothing
-    """
 
-    print("File size: {}".format(file_size))
-    for key, val in sorted(dic.items()):
-        if val != 0:
-            print("{}: {}".format(key, val))
+def print_m(dict_s, file_size):
+    """ WWPrints information """
+    print("File size: {:d}".format(size))
+    for i in sorted(dic.keys()):
+        if dict_s[i] != 0:
+            print("{}: {:d}".format(i, dict_s[i]))
 
+sts = {"200": 0, "301": 0, "400": 0, "401": 0, "403": 0,
+       "404": 0, "405": 0, "500": 0}
 
-file_size = 0
-code = 0
-counter = 0
-dic = {"200": 0,
-           "301": 0,
-           "400": 0,
-           "401": 0,
-           "403": 0,
-           "404": 0,
-           "405": 0,
-           "500": 0}
+count = 0
+size = 0
 
 try:
     for line in sys.stdin:
-        parsed_line = line.split()  # ✄ trimming
-        parsed_line = parsed_line[::-1]  # inverting
+        if count != 0 and count % 10 == 0:
+            print_m(sts, file_size)
 
-        if len(parsed_line) > 2:
-            counter += 1
+        stlist = line.split()
+        count += 1
 
-            if counter <= 10:
-                file_size += int(parsed_line[0])  # file size
-                code = parsed_line[1]  # status code
+        try:
+            file_size += int(stlist[-1])
+        except:
+            pass
 
-                if (code in dic.keys()):
-                    dic[code] += 1
+        try:
+            if stlist[-2] in sts:
+                sts[stlist[-2]] += 1
+        except:
+            pass
+    print_m(sts, file_size)
 
-            if (counter == 10):
-                print_msg(dic, file_size)
-                counter = 0
 
-finally:
-    print_m(dic, file_size)
+except KeyboardInterrupt:
+    print_m(sts, file_size)
+    raise
