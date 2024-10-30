@@ -1,12 +1,9 @@
-ii#!/usr/bin/python3
-
-"""Script that reads stdin line by line and computes metrics"""
+#!/usr/bin/python
 
 import sys
 
-
 def print_m(dict_s, file_size):
-    """ WWPrints information """
+    # This function would process and print stats
     print("File size: {:d}".format(size))
     for i in sorted(dic.keys()):
         if dict_s[i] != 0:
