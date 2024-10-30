@@ -1,41 +1,53 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import sys
 
-def print_m(dict_s, file_size):
-    # This function would process and print stats
-    print("File size: {:d}".format(size))
-    for i in sorted(dic.keys()):
-        if dict_s[i] != 0:
-            print("{}: {:d}".format(i, dict_s[i]))
 
-sts = {"200": 0, "301": 0, "400": 0, "401": 0, "403": 0,
-       "404": 0, "405": 0, "500": 0}
+def prt_msg(dict_sc, file_size):
+    """
+    Args:
+        dict_sc: dict of status codes
+        total_file_size: total of the file
+    Returns:
+        Nothing
+    """
 
-count = 0
-size = 0
+    print("File size: {}".format(file_size))
+    for key, val in sorted(dict_sc.items()):
+        if val != 0:
+            print("{}: {}".format(key, val))
+
+
+file_size = 0
+code = 0
+counter = 0
+dict_sc = {"200": 0,
+           "301": 0,
+           "400": 0,
+           "401": 0,
+           "403": 0,
+           "404": 0,
+           "405": 0,
+           "500": 0}
 
 try:
     for line in sys.stdin:
-        if count != 0 and count % 10 == 0:
-            print_m(sts, file_size)
+        parsed_line = line.split()  # ✄ trimming
+        parsed_line = parsed_line[::-1]  # inverting
 
-        stlist = line.split()
-        count += 1
+        if len(parsed_line) > 2:
+            counter += 1
 
-        try:
-            file_size += int(stlist[-1])
-        except:
-            pass
+            if counter <= 10:
+                file_size += int(parsed_line[0])  # file size
+                code = parsed_line[1]  # status code
 
-        try:
-            if stlist[-2] in sts:
-                sts[stlist[-2]] += 1
-        except:
-            pass
-    print_m(sts, file_size)
+                if (code in dict_sc.keys()):
+                    dict_sc[code] += 1
 
+            if (counter == 10):
+                prt_msg(dict_sc, file_size)
+                counter = 0
 
-except KeyboardInterrupt:
-    print_m(sts, file_size)
-    raise
+finally:
+    prt_msg(dict_sc, file_size)
